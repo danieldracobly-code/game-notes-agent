@@ -1,0 +1,11 @@
+# Generated per-run data and outputs (keep folders, not contents)
+data/*
+!data/.gitkeep
+output/*
+!output/.gitkeep
+
+# Personal Claude Code settings
+.claude/settings.local.json
+
+.DS_Store
+Thumbs.db
