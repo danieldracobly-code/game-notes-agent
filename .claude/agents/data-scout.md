@@ -39,6 +39,31 @@ After each download, confirm the file exists and is not empty.
    → save as stats_{TEAM}.json. Stats include `rank` / `rankDisplayValue` fields; use those
    for rankings instead of computing any.
 
+5. Series history (only if you were told to fetch series info). The game summary has no
+   all-time head-to-head field, so build it from past schedules of TEAM:
+   https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team}/schedule?season={YEAR}&seasontype=2
+   https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team}/schedule?season={YEAR}&seasontype=3
+   → save as hist_{TEAM}_{YEAR}_reg.json and hist_{TEAM}_{YEAR}_post.json.
+   - Start with the previous season and go back one year at a time, as far as ESPN has
+     data. Download in a single Bash loop, not one call per file.
+   - Stop when two seasons in a row return no regular-season events or an error, or
+     after 1970, whichever comes first. The earliest season with events is the
+     "coverage start". A postseason file with no events just means no playoff games.
+   - Older seasons are partial. As checked on 2026-09-29, ESPN returned full regular
+     seasons from 1993 on, but only 7-11 games per season for 1971-1992. For each
+     regular-season file, count its games, e.g. with
+     `grep -o '"shortName":"[A-Z]* @ [A-Z]*"' FILE | wc -l`, and write the counts in the
+     facts sheet. The "complete window" is the unbroken run of seasons, going back from the
+     latest, whose counts are not clearly below the seasons after them. Report the record
+     only for the complete window. List meetings from before that window separately,
+     labeled "ESPN data incomplete for these seasons".
+   - Match meetings by the opponent's numeric team id (from the summary or the opponent's
+     team file), not by abbreviation. Franchises that relocated (e.g. LAC, LV, LAR) appear
+     under older abbreviations in older seasons.
+   - To find meetings, Grep each hist file for the opponent id, then Read only those events.
+     Only count games with a final score. Also include any meeting earlier this season
+     from schedule_{TEAM}.json.
+
 If an endpoint fails or returns an error, retry once, then record it under "Missing data".
 
 ## Reading large files
@@ -74,8 +99,17 @@ Generated: {date/time}
 ## Injury report
 - Name, POS, status, injury [summary_...json]  (note the report date if given)
 
-## Series / recent meetings (if present in the data)
-- ...
+## Series history (if you were told to fetch it)
+- Coverage: seasons {coverage start}-{last season} downloaded; games per season: 2025=17, ... [hist_BUF_*_reg.json]
+- Complete window: {first}-{last season}; seasons before {first} look partial [hist_BUF_*_reg.json]
+- Record in complete window: BUF W-L-T (computed: list the wins/losses/ties counted) [hist_BUF_*.json]
+- Meetings before the complete window (ESPN data incomplete for these seasons): ... [hist_BUF_YEAR_reg.json]
+- Postseason meetings: each one with date, round if given, score, or "none in coverage" [hist_BUF_*_post.json]
+- Last meeting: date, site, score [hist_BUF_YEAR_reg.json]
+- Every meeting, newest first: date (UTC as given), AWAY at HOME, score, abbreviation used
+  that season [hist_BUF_YEAR_reg.json]
+- Streaks or splits only if written out as a computation
+- Never call the record "all-time" unless the data says so. It is the record "since {coverage start}".
 
 ## Missing data
 - Anything you tried to get and could not.

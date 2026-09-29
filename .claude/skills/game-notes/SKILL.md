@@ -27,7 +27,9 @@ State a 3-5 line plan for this run in the chat.
    run in parallel)**:
    - one for OPPONENT with RUN_DIR and EVENT_ID,
    - one for OUR_TEAM with RUN_DIR and EVENT_ID, told to fetch the game summary and
-     update facts_<OUR_TEAM>.md with leaders, injuries, odds and series info.
+     update facts_<OUR_TEAM>.md with leaders, injuries, odds and series info. Tell it to
+     fetch series history (data-scout endpoint 5) against OPPONENT, whose numeric team id
+     is in the game summary.
 4. Confirm both facts sheets exist. Report any "Missing data" lines in one sentence.
 
 ## Step 1b — Research (SAVED MODE, for demos)

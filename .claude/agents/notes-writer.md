@@ -31,6 +31,13 @@ and 4-6 other stats with NFL ranks, only where the facts sheets have them.
 
 ## Series History
 Only what the facts sheets contain. If nothing, write "Series data unavailable."
+When the facts sheet has a series section, lead with the record and label it with the
+complete window, e.g. "Buffalo leads 28-24 since 1993 (ESPN data)". Leave out meetings the
+sheet marks as coming from incomplete seasons, or mention them separately with that label.
+Never say "all-time"
+unless the facts sheet does. Then give the last meeting and any postseason meetings, and a
+short list of the most recent meetings (up to 5). Use the team names as the facts sheet
+gives them for each season. Do not add up or rework the record yourself.
 
 ## Players to Watch
 2-3 per team with their numbers.
